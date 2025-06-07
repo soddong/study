@@ -95,4 +95,36 @@ org.example.Singleton@2ff4acd0, org.example.Singleton@2ff4acd0, org.example.Sing
   * Builder는 객체를 "어떻게 만들 것인지"를 정의하고,
   * Director는 Builder를 조립하는 순서를 정하는 역할을 맡는다.
 
--> 빌더 조립 순서를 변경하지 못하도록 강제하고 싶을 때 director를 쓰면 용이하다.
+```java
+    public class BuilderExample {
+        public static void main(String[] args) {
+            Director director = new Director();
+            CarBuilder builder = new CarBuilder();
+    
+            director.constructSportsCar(builder);
+            Car car = builder.getProduct();
+    
+            System.out.println(car);
+        }
+    }
+
+    class Director {
+        public void constructSportsCar(Builder builder) {
+            builder.reset();
+            builder.setSeats(2);
+            builder.setEngine("V8");
+            builder.setGPS("Enabled");
+        }
+    }
+```
+* 위와 같이 순서를 강제하는 director 클래스를 만들고
+* Builder를 주입한 후, director 가 정의한 순서대로 객체 생성과정을 수행하면
+* 객체생성 절차의 일관성을 유지하고, 클라이언트는 생성 로직을 몰라도 객체를 만들수있다.
+
+### Builder vs GoF Builder Pattern
+* 평소에 자주 쓰는 Lombok의 @Builder나 DTO 만들 때 쓰는 방식은 사실 GoF에서 말한 전통적인 Builder 패턴과는 다르다.
+* Lombok의 빌더는 주로 객체의 필드를 자유롭게 설정해서, build()로 마무리 짓는 형태다.
+* 반면 GoF에서 말하는 빌더 패턴은 좀 더 구조적이다.
+* Builder는 객체의 부품들을 어떻게 설정할지에 대한 책임만 갖고 있고,
+* Director가 전체 조립 순서를 관리한다.
+* 아무튼, 둘 다 Builder란 이름을 쓰지만, 목적도 쓰임새도 조금 다르다.
