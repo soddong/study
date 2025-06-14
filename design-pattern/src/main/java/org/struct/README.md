@@ -78,3 +78,131 @@ class SquarePegAdapter extends RoundPeg {
 
 * 즉, ImageEditor는 전체 구조가 leaf인지 composite인지 신경 쓰지 않고
 * Graphic 타입으로 요소를 추가, 그룹화, 이동, 그리기를 수행한다.
+
+## Decorator Pattern
+* 기능 확장시 객체의 결합을 통해 런타임에 동적으로 추가할 수 있도록 해주는 디자인 패턴
+
+### 예시
+* 위 말로는 잘 이해가 안되므로,, 간략한 예시로 알아보겠다.
+* 카페에서 커피를 주문한다고 할 때,
+  * 기본 커피 (+ 우유, 시럽, 휘핑, 샷 추가) 등등 다양한 옵션을 추가할 수 있다고 하자.
+  * 이때 단순히 구현해보면 아래와 같다.
+
+#### before
+  ```java
+  class Coffee {
+    public int cost() {
+        return 3000; // 기본 아메리카노
+    }
+  } 
+  
+  class MilkCoffee extends Coffee {
+    @Override
+    public int cost() {
+        return super.cost() + 500;
+    }
+  }
+
+  class SyrupMilkCoffee extends Coffee {
+    @Override
+    public int cost() {
+        return super.cost() + 500 + 300;
+    }
+  }
+  ```
+| 조합             | 필요한 클래스            |
+|------------------|--------------------------|
+| 우유             | MilkCoffee               |
+| 시럽 + 우유      | SyrupMilkCoffee          |
+| 휘핑 + 샷 + 시럽 | WhipShotSyrupCoffee      |
+
+* 기능을 조합하려고 상속만 사용하면, 2^n - 1개의 모든 조합 클래스를 직접 만들어야 한다. (기능 추가나 제거도 유연x)
+
+#### after
+```java
+// 상위 인터페이스
+interface Beverage {
+  int cost();
+}
+
+// 기본 커피
+class Coffee implements Beverage {
+  public int cost() {
+    return 3000;
+  }
+}
+
+// 공통 데코레이터 추상 클래스
+abstract class AddOnDecorator implements Beverage {
+  protected Beverage base;
+
+  public AddOnDecorator(Beverage base) {
+    this.base = base;
+  }
+}
+
+// 우유 추가
+class Milk extends AddOnDecorator {
+  public Milk(Beverage base) {
+    super(base);
+  }
+
+  public int cost() {
+    return base.cost() + 500;
+  }
+}
+
+// 시럽 추가
+class Syrup extends AddOnDecorator {
+  public Syrup(Beverage base) {
+    super(base);
+  }
+
+  public int cost() {
+    return base.cost() + 300;
+  }
+}
+
+public class DecoratorExample {
+  public static void main(String[] args) {
+    Beverage coffee = new Coffee();       // 기본 커피 3000
+    coffee = new Milk(coffee);               // + 우유 500 → 3500
+    coffee = new Syrup(coffee);              // + 시럽 300 → 3800
+
+    System.out.println("최종 가격: " + coffee.cost() + "원");
+  }
+}
+
+```
+* 데코레이터 패턴은 모든 기능 클래스가 같은 상위 인터페이스를 구현하고
+* 실제 기능은 런타임에 외부에서 주입하여 객체를 조립하듯 감싸게 된다!
+
+#### 실행 결과
+```text
+  >> Task :DecoratorExample.main()
+  >> Syrup cost() method call, +300
+  >> Milk cost() method call, +500
+  >> Coffee cost() method call, 3000
+  Total Cost: 3800
+```
+* 실제 실행 결과를 보면, 위와 같다.
+* 객체를 감싸면서 기능을 누적하므로,
+* 내부적으로 base.cost()를 호출해 안쪽 객체부터 계산되는 것을 알 수 있다. (로그는 메서드 진입 시점이라 반대임)
+
+### 구조
+![img.png](img.png)
+* 구조와 코드를 대입해보면, 다음과 같다.
+
+| 구성 요소               | 설명                                                      | 코드         |
+|------------------------|-----------------------------------------------------------|------------------------------|
+| Component              | 공통 인터페이스 또는 추상 클래스                          | `Beverage` (interface)       |
+| ConcreteComponent      | 실제 기능을 가진 기본 객체                                 | `Coffee`     |
+| Decorator (Base Decorator) | Component 인터페이스를 구현하고, 내부에 Component를 포함하는 클래스 | `AddOnDecorator` (abstract)  |
+| ConcreteDecorator      | 데코레이터 역할 + 실제 기능을 덧붙이는 클래스              | `Milk`, `Syrup` 등           |
+
+* 가장 상위 인터페이스(component)를 둔다.
+  * 이 인터페이스는 공통 기능을 정의한다.
+* ConcreteComponent는 이 인터페이스를 구현하며, 가장 베이스가 되는 기본 기능을 제공한다.
+* BaseDecorator는 같은 인터페이스(component)를 구현하고, 내부에 원본 객체(component)를 필드로 포함한다.
+* ConcreteDecorator는 BaseDecorator를 확장하고, 실제로 부가기능을 구현한다.
+* Client는 필요한 기능을 동적으로 조합해서 데코레이터 체인을 구성하게 된다. -> 기능 확장
