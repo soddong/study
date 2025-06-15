@@ -206,3 +206,24 @@ public class DecoratorExample {
 * BaseDecorator는 같은 인터페이스(component)를 구현하고, 내부에 원본 객체(component)를 필드로 포함한다.
 * ConcreteDecorator는 BaseDecorator를 확장하고, 실제로 부가기능을 구현한다.
 * Client는 필요한 기능을 동적으로 조합해서 데코레이터 체인을 구성하게 된다. -> 기능 확장
+
+## Facade Pattern
+* 다수의 서브클래스를 하나로 간단한 인터페이스로 제공해주는 디자인 패턴
+
+### 예제
+* 예를 들어, 컴퓨터를 부팅하는 로직은 아래와 같은 절차가 필요하다.
+  1. CPU를 freeze 한다.
+  2. SSD에서 부트 데이터를 읽는다.
+  3. Memory에 데이터를 load 한다.
+  4. CPU가 해당 위치로 jump 후 실행한다.
+* 이 과정을 모두 클라이언트 코드에서 직접 호출한다면
+  * 로직이 복잡하게 얽히고,
+  * 클라이언트의 책임이 커져서 결합도가 높아진다
+* 따라서 ComputerFacade 라는 클래스를 만들어, 내부적으로 이 절차를 처리하게 만들 수 있다.
+  ```java
+    ComputerFacade computer = new ComputerFacade();
+    computer.start();
+  ```
+  * 이를 통해 복잡한 시스템을 단순하게 만들고
+  * 클라이언트 입장에서 알아야 할 요소가 적어진다
+  * 즉, 클라이언트 영향을 최소화 할 수 있다.
