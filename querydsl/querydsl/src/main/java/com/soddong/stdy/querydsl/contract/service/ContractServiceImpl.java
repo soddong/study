@@ -1,5 +1,6 @@
 package com.soddong.stdy.querydsl.contract.service;
 
+import com.soddong.stdy.querydsl.contract.adapter.in.web.dto.ContractQuery;
 import com.soddong.stdy.querydsl.contract.domain.model.Contract;
 import com.soddong.stdy.querydsl.contract.port.in.ContractUseCase;
 import com.soddong.stdy.querydsl.contract.port.out.ContractRepository;
@@ -30,7 +31,7 @@ public class ContractServiceImpl implements ContractUseCase {
     }
 
     @Override
-    public List<Contract> getAll() {
-        return contractRepository.findAll();
+    public List<Contract> searchByCondition(ContractQuery query) {
+        return contractRepository.searchByCondition(query);
     }
 }

@@ -1,5 +1,6 @@
 package com.soddong.stdy.querydsl.contract.adapter.in.web;
 
+import com.soddong.stdy.querydsl.contract.adapter.in.web.dto.ContractQuery;
 import com.soddong.stdy.querydsl.contract.adapter.in.web.dto.ContractRequest;
 import com.soddong.stdy.querydsl.contract.adapter.in.web.dto.ContractResponse;
 import com.soddong.stdy.querydsl.contract.domain.model.Contract;
@@ -35,10 +36,10 @@ public class ContractController {
         );
     }
 
-    // 전체 계약 조회
-    @GetMapping
-    public List<ContractResponse> getAll() {
-        return contractUseCase.getAll().stream()
+    // 조건부 전체 계약 조회
+    @GetMapping("/contracts")
+    public List<ContractResponse> search(@ModelAttribute ContractQuery query) {
+        return contractUseCase.searchByCondition(query).stream()
                 .map(ContractResponse::from)
                 .toList();
     }

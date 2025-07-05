@@ -1,6 +1,6 @@
 package com.soddong.stdy.querydsl.contract.adapter.out.persistence.repository;
 
-import com.soddong.stdy.querydsl.contract.adapter.out.persistence.entity.ContractJpaEntity;
+import com.soddong.stdy.querydsl.contract.adapter.in.web.dto.ContractQuery;
 import com.soddong.stdy.querydsl.contract.adapter.out.persistence.mapper.ContractMapper;
 import com.soddong.stdy.querydsl.contract.domain.model.Contract;
 import com.soddong.stdy.querydsl.contract.port.out.ContractRepository;
@@ -20,10 +20,9 @@ public class ContractRepositoryImpl implements ContractRepository {
 
     @Override
     public Contract save(Contract contract) {
-        ContractJpaEntity savedContract = contractJpaRepository.save(
-                ContractMapper.toEntity(contract)
+        return ContractMapper.toDomain(
+                contractJpaRepository.save(ContractMapper.toEntity(contract))
         );
-        return ContractMapper.toDomain(savedContract);
     }
 
     @Override
@@ -33,15 +32,16 @@ public class ContractRepositoryImpl implements ContractRepository {
     }
 
     @Override
-    public List<Contract> findAll() {
+    public List<Contract> findByCustomerId(Long customerId) {
         return contractJpaRepository.findAll().stream()
+                .filter(c -> c.getCustomerId().equals(customerId))
                 .map(ContractMapper::toDomain)
                 .toList();
     }
 
     @Override
-    public List<Contract> findByCustomerId(Long customerId) {
-        return contractJpaRepository.findById(customerId).stream()
+    public List<Contract> searchByCondition(ContractQuery query) {
+        return contractJpaRepository.searchByCondition(query).stream()
                 .map(ContractMapper::toDomain)
                 .toList();
     }
