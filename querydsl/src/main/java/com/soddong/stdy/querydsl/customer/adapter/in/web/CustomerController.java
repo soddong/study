@@ -1,5 +1,6 @@
 package com.soddong.stdy.querydsl.customer.adapter.in.web;
 
+import com.soddong.stdy.querydsl.customer.adapter.in.web.dto.CustomerQuery;
 import com.soddong.stdy.querydsl.customer.adapter.in.web.dto.CustomerRequest;
 import com.soddong.stdy.querydsl.customer.adapter.in.web.dto.CustomerResponse;
 import com.soddong.stdy.querydsl.customer.port.in.CustomerUseCase;
@@ -33,8 +34,8 @@ public class CustomerController {
 
     // 전체 고객 조회
     @GetMapping
-    public List<CustomerResponse> getAll() {
-        return customerUseCase.getAll().stream()
+    public List<CustomerResponse> getAll(CustomerQuery query) {
+        return customerUseCase.getAll(query).stream()
                 .map(CustomerResponse::from)
                 .toList();
     }

@@ -155,6 +155,40 @@ public List<ContractJpaEntity> searchByCondition(ContractQuery query) {
             .fetch();
 }
 ```
+
+#### 3) QuerydslPredicateExecutor 방식
+```java
+public interface ContractJpaRepository extends
+        JpaRepository<ContractJpaEntity, Long>,
+        QuerydslPredicateExecutor<ContractJpaEntity> {
+}
+
+public List<Contract> searchByCondition(ContractQuery query) {
+    QContractJpaEntity c = QContractJpaEntity.contractJpaEntity;
+    BooleanBuilder builder = new BooleanBuilder();
+
+    if (query.status() != null) {
+        builder.and(c.status.eq(query.status()));
+    }
+
+    LocalDate from = query.startDateFrom();
+    LocalDate to = query.startDateTo();
+
+    if (from != null && to != null) {
+        builder.and(c.startDate.between(from, to));
+    } else if (from != null) {
+        builder.and(c.startDate.goe(from));
+    } else if (to != null) {
+        builder.and(c.startDate.loe(to));
+    }
+
+    // 직접 repository에 전달
+    return contractJpaRepository.findAll(builder).stream()
+            .map(ContractMapper::toDomain)
+            .toList();
+}
+```
+
 #### 공통 문법
 | QueryDSL 메서드                   | SQL 대응 문법                  | 설명               |
 | ------------------------------ | -------------------------- | ---------------- |
