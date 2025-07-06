@@ -2,6 +2,7 @@ package com.soddong.stdy.querydsl.customer.service;
 
 import com.soddong.stdy.querydsl.customer.adapter.in.web.dto.CustomerQuery;
 import com.soddong.stdy.querydsl.customer.domain.model.Customer;
+import com.soddong.stdy.querydsl.customer.domain.model.vo.PhoneNumber;
 import com.soddong.stdy.querydsl.customer.port.in.CustomerUseCase;
 import com.soddong.stdy.querydsl.customer.port.out.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,8 @@ public class CustomerServiceImpl implements CustomerUseCase {
 
     @Override
     public Customer register(String name, String phone) {
-        return customerRepository.save(new Customer(null, name, phone));
+        PhoneNumber phoneNumber = new PhoneNumber(phone);
+        return customerRepository.save(new Customer(null, name, phoneNumber));
     }
 
     @Override

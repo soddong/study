@@ -2,8 +2,10 @@ package com.soddong.stdy.querydsl.contract.service;
 
 import com.soddong.stdy.querydsl.contract.adapter.in.web.dto.ContractQuery;
 import com.soddong.stdy.querydsl.contract.domain.model.Contract;
+import com.soddong.stdy.querydsl.contract.domain.model.vo.ContractPeriod;
 import com.soddong.stdy.querydsl.contract.port.in.ContractUseCase;
 import com.soddong.stdy.querydsl.contract.port.out.ContractRepository;
+import com.soddong.stdy.querydsl.customer.domain.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +21,9 @@ public class ContractServiceImpl implements ContractUseCase {
 
     @Override
     public Contract register(LocalDate startDate, LocalDate endDate, Long customerId) {
+        ContractPeriod contractPeriod = new ContractPeriod(startDate, endDate);
         return contractRepository.save(
-                Contract.create(startDate, endDate, customerId)
+                Contract.create(contractPeriod, customerId)
         );
     }
 

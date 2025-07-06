@@ -1,5 +1,6 @@
 package com.soddong.stdy.querydsl.customer.adapter.out.persistence.entity;
 
+import com.soddong.stdy.querydsl.customer.domain.model.vo.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +17,6 @@ public class CustomerJpaEntity {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String phone;
+    @Embedded
+    private PhoneNumber phone;
 }

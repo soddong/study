@@ -45,4 +45,9 @@ public class ContractRepositoryImpl implements ContractRepository {
                 .map(ContractMapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public boolean existsByCustomerId(Long customerId) {
+        return contractJpaRepository.existsByCustomerId(customerId);
+    }
 }

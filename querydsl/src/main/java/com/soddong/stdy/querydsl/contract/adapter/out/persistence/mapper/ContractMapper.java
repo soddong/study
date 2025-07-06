@@ -10,8 +10,7 @@ public class ContractMapper {
 
         return new Contract(
                 entity.getId(),
-                entity.getStartDate(),
-                entity.getEndDate(),
+                entity.getContractPeriod(),
                 entity.getStatus(),
                 entity.getCustomerId()
         );
@@ -22,8 +21,7 @@ public class ContractMapper {
 
         return ContractJpaEntity.builder()
                 .id(contract.getId())
-                .startDate(contract.getStartDate())
-                .endDate(contract.getEndDate())
+                .contractPeriod(contract.getContractPeriod())
                 .status(contract.getStatus())
                 .customerId(contract.getCustomerId())
                 .build();

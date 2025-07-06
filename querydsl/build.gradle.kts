@@ -26,6 +26,9 @@ dependencies {
 
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
 
+    // jmolecules
+    implementation("org.jmolecules:jmolecules-ddd:1.9.0")
+
     // Lombok annotation processor (컴파일 시 자동 코드 생성용)
     annotationProcessor("org.projectlombok:lombok")
 

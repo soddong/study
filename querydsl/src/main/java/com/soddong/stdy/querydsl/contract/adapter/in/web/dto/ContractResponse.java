@@ -16,8 +16,8 @@ public record ContractResponse(
     public static ContractResponse from(Contract contract) {
         return new ContractResponse(
                 contract.getId(),
-                contract.getStartDate(),
-                contract.getEndDate(),
+                contract.getContractPeriod().getStartDate(),
+                contract.getContractPeriod().getEndDate(),
                 contract.getStatus(),
                 contract.getCustomerId()
         );

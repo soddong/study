@@ -1,47 +1,49 @@
 package com.soddong.stdy.querydsl.contract.domain.model;
 
 import com.soddong.stdy.querydsl.contract.adapter.out.persistence.entity.ContractStatus;
+import com.soddong.stdy.querydsl.contract.domain.model.entity.ContractHistory;
+import com.soddong.stdy.querydsl.contract.domain.model.vo.ContractPeriod;
 import lombok.Data;
+import org.jmolecules.ddd.annotation.AggregateRoot;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
+@AggregateRoot
 public class Contract {
     private final Long id;
-    private final LocalDate startDate;
-    private final LocalDate endDate;
+    private ContractPeriod contractPeriod;
     private ContractStatus status;
     private final Long customerId;
 
-    public Contract(Long id, LocalDate startDate, LocalDate endDate, ContractStatus status, Long customerId) {
+    public Contract(Long id, ContractPeriod contractPeriod, ContractStatus status, Long customerId) {
         this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.contractPeriod = contractPeriod;
         this.status = status;
         this.customerId = customerId;
     }
 
-    public Contract(Long id, LocalDate startDate, LocalDate endDate, Long customerId) {
+    public Contract(Long id, ContractPeriod contractPeriod, Long customerId) {
         this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.contractPeriod = contractPeriod;
         this.status = status;
         this.customerId = customerId;
     }
 
     // 등록용 생성 팩토리
-    public static Contract create(LocalDate startDate, LocalDate endDate, Long customerId) {
-        return new Contract(null, startDate, endDate, ContractStatus.ACTIVE, customerId);
+    public static Contract create(ContractPeriod contractPeriod, Long customerId) {
+        return new Contract(null, contractPeriod, ContractStatus.ACTIVE, customerId);
     }
 
     // 조회용 팩토리
-    public static Contract of(Long id, LocalDate startDate, LocalDate endDate, ContractStatus status, Long customerId) {
-        return new Contract(id, startDate, endDate, status, customerId);
+    public static Contract of(Long id, ContractPeriod contractPeriod, ContractStatus status, Long customerId) {
+        return new Contract(id, contractPeriod, status, customerId);
     }
 
 
     public boolean isExpired() {
-        return endDate != null && endDate.isBefore(LocalDate.now());
+        return contractPeriod.isExpired();
     }
 
     public boolean isActive() {

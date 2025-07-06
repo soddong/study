@@ -12,4 +12,6 @@ public interface ContractRepository {
     Optional<Contract> findById(Long id);
     List<Contract> findByCustomerId(Long customerId);
     List<Contract> searchByCondition(ContractQuery query);
+
+    boolean existsByCustomerId(Long customerId);
 }

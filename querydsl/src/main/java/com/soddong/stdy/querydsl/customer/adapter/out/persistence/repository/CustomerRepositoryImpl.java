@@ -53,7 +53,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         }
 
         if (query.phone() != null && !query.phone().isBlank()) {
-            builder.and(c.phone.containsIgnoreCase(query.phone()));
+            builder.and(c.phone.number.containsIgnoreCase(query.phone()));
         }
 
         List<Customer> result = new ArrayList<>();

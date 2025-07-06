@@ -33,11 +33,11 @@ public class ContractJpaRepositoryImpl implements ContractJpaRepositoryCustom {
         LocalDate to = query.startDateTo();
 
         if (from != null && to != null) {
-            builder.and(c.startDate.between(from, to));
+            builder.and(c.contractPeriod.startDate.between(from, to));
         } else if (from != null) {
-            builder.and(c.startDate.goe(from));
+            builder.and(c.contractPeriod.startDate.goe(from));
         } else if (to != null) {
-            builder.and(c.startDate.loe(to));
+            builder.and(c.contractPeriod.startDate.loe(to));
         }
 
         return queryFactory.selectFrom(c)

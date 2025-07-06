@@ -1,5 +1,6 @@
 package com.soddong.stdy.querydsl.contract.adapter.out.persistence.entity;
 
+import com.soddong.stdy.querydsl.contract.domain.model.vo.ContractPeriod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +22,8 @@ public class ContractJpaEntity {
 
     private String name;
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
+    @Embedded
+    private ContractPeriod contractPeriod;
 
     @Enumerated(EnumType.STRING)
     private ContractStatus status;
