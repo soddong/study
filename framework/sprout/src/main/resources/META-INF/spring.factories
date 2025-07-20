@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.soddong.stdy.sprout.config.AutoRestConfiguration
