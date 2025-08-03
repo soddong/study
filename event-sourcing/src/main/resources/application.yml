@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: event-sourcing
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase   # DB URL
+    username: myuser                                    # DB ????
+    password: secret                                    # DB ????
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update          # ?? ??: create-drop | update | validate | none
+    properties:
+      hibernate:
+        format_sql: true         # SQL ???
+        show_sql: true           # SQL ?? ??
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  sql:
+    init:
+      mode: always               # schema.sql, data.sql ?? ?? (???)
+
+logging:
+  level:
+    org.hibernate.SQL: debug      # SQL ?? ??
+    org.hibernate.type.descriptor.sql.BasicBinder: trace  # ??? ? ??
